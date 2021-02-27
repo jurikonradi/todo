@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-Todo-icon-try.js
-EditTemplate.js
+src/Todo-icon-try.js
+src/EditTemplate.js
