@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "todo-test-c51d0"
+    "default": "todo-test-c51d0",
+    "staging": "todo-test-c51d0"
   }
 }

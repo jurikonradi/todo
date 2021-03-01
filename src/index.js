@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import App from "./App";
 
 const TODOS_INITIAL = [
-  { id: "todo-0", name: "Do The Dishes", isCompleted: false },
-  { id: "todo-1", name: "Take Out The Trash", isCompleted: false },
-  { id: "todo-2", name: "Finish Doing Loundry", isCompleted: false },
+  { id: "todo-0", name: "Do The Dishes" },
+  { id: "todo-1", name: "Take Out The Trash" },
+  { id: "todo-2", name: "Finish Doing Loundry" },
 ];
 
 ReactDOM.render(
@@ -14,4 +14,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
