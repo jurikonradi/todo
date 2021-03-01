@@ -1,6 +1,8 @@
 # Todo App
 
-Functons: Add New, Delete, Edit. Wrten with React, useReducer, Boootstrap-React.
+Functions: Add New, Delete, Edit.
+
+Written with React, useReducer, Boootstrap-React.
 
 # Demo online
 
@@ -8,7 +10,11 @@ https://todo-test-c51d0.web.app/
 or
 https://todo-test-c51d0.firebaseapp.com/
 
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+---
 
 ## Available Scripts
 
