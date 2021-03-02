@@ -7,7 +7,26 @@ import ListGroup from "react-bootstrap/ListGroup";
 import FormTodo from "./FormTodo";
 import Todo from "./Todo";
 
-// const ACTIONS = {
+import firebase from "firebase/app";
+import "firebase/firestore";
+firebase.initializeApp({
+  apiKey: "AIzaSyBuv9zQsAeNzvTFgINl1Nc_AItsrcnsHJM",
+  authDomain: "todo-test-c51d0.firebaseapp.com",
+  projectId: "todo-test-c51d0",
+});
+var db = firebase.firestore();
+
+function addTodoToDB(todo) {
+  db.collection("todos-test")
+    .add({ id: todo.id, name: todo.name, isCompleted: todo.isCompleted })
+    .then((docRef) => {
+      console.log("Todo written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+}
+// export const ACTIONS = {
 //   NEW_TODO: "newTodo",
 // };
 
@@ -19,6 +38,7 @@ function reducer(todos, action) {
         name: action.payload.name,
         isCompleted: false,
       };
+      addTodoToDB(newTodo);
       return [...todos, newTodo];
     }
     case "deleteTodo": {
