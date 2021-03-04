@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import "./App.sass";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { nanoid } from "nanoid";
@@ -6,29 +6,8 @@ import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import FormTodo from "./FormTodo";
 import Todo from "./Todo";
-
-import firebase from "firebase/app";
-import "firebase/firestore";
-firebase.initializeApp({
-  apiKey: "AIzaSyBuv9zQsAeNzvTFgINl1Nc_AItsrcnsHJM",
-  authDomain: "todo-test-c51d0.firebaseapp.com",
-  projectId: "todo-test-c51d0",
-});
-var db = firebase.firestore();
-
-function addTodoToDB(todo) {
-  db.collection("todos-test")
-    .add({ id: todo.id, name: todo.name, isCompleted: todo.isCompleted })
-    .then((docRef) => {
-      console.log("Todo written with ID: ", docRef.id);
-    })
-    .catch((error) => {
-      console.error("Error adding document: ", error);
-    });
-}
-// export const ACTIONS = {
-//   NEW_TODO: "newTodo",
-// };
+import { addTodoToDB, db } from "./db/firebase.js";
+import { collectionName } from "./db/firebase.config.js";
 
 function reducer(todos, action) {
   switch (action.type) {
@@ -56,25 +35,56 @@ function reducer(todos, action) {
       });
       return editedTodos;
     }
+    case "itializeTodos": {
+      const todosFromDB = [...action.payload.todos];
+      return todosFromDB;
+    }
     default:
       return todos;
   }
 }
 
-function App(props) {
-  const [todos, dispatch] = useReducer(reducer, props.todos);
+function App() {
+  const [todos, dispatch] = useReducer(reducer, []);
+
+  useEffect(() => {
+    async function getData() {
+      const todosFromDB = await db
+        .collection(collectionName)
+        .get()
+        .then((querySnapshot) => {
+          let todos = [];
+          querySnapshot.forEach((doc) => {
+            todos.push({
+              id: doc.id,
+              name: doc.data().name,
+              isCompleted: doc.data().isCompleted,
+            });
+          });
+          return todos;
+        })
+        .then((todos) => todos);
+      dispatch({ type: "itializeTodos", payload: { todos: todosFromDB } });
+    }
+    getData();
+    console.log("This is a side effect");
+  }, []);
 
   return (
-    <Container className="container-sm">
+    <Container>
       <h1>My To-dos</h1>
-
-      <FormTodo dispatch={dispatch} />
-
-      <ListGroup>
-        {todos.map((todo) => (
-          <Todo todo={todo} key={todo.id} dispatch={dispatch} />
-        ))}
-      </ListGroup>
+      {todos.length === 0 ? (
+        <div>Loading from Data Base... </div>
+      ) : (
+        <>
+          <FormTodo dispatch={dispatch} />
+          <ListGroup>
+            {todos.map((todo) => (
+              <Todo todo={todo} key={todo.id} dispatch={dispatch} />
+            ))}
+          </ListGroup>
+        </>
+      )}
     </Container>
   );
 }
