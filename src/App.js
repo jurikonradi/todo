@@ -6,8 +6,8 @@ import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import FormTodo from "./FormTodo";
 import Todo from "./Todo";
-import { addTodoToDB, db } from "./db/firebase.js";
-import { collectionName } from "./db/firebase.config.js";
+import { addTodoToDB, loadTodosFromDB } from "./db/firebase.js";
+// import { collectionName } from "./db/firebase.config.js";
 
 function reducer(todos, action) {
   switch (action.type) {
@@ -48,26 +48,10 @@ function App() {
   const [todos, dispatch] = useReducer(reducer, []);
 
   useEffect(() => {
-    async function getData() {
-      const todosFromDB = await db
-        .collection(collectionName)
-        .get()
-        .then((querySnapshot) => {
-          let todos = [];
-          querySnapshot.forEach((doc) => {
-            todos.push({
-              id: doc.id,
-              name: doc.data().name,
-              isCompleted: doc.data().isCompleted,
-            });
-          });
-          return todos;
-        })
-        .then((todos) => todos);
-      dispatch({ type: "itializeTodos", payload: { todos: todosFromDB } });
-    }
-    getData();
-    console.log("This is a side effect");
+    loadTodosFromDB().then((results) => {
+      console.log("results: ", results);
+      dispatch({ type: "itializeTodos", payload: { todos: results } });
+    });
   }, []);
 
   return (

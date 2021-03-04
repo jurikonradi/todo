@@ -16,13 +16,9 @@ export function addTodoToDB(todo) {
     });
 }
 
-export function loadTodosFromDB() {
-  let newTodos = [];
-  function returnTodos(todos) {
-    newTodos = [...todos];
-    console.log("return: ", newTodos);
-  }
-  db.collection(collectionName)
+export async function loadTodosFromDB() {
+  const todosFromDB = await db
+    .collection(collectionName)
     .get()
     .then((querySnapshot) => {
       let todos = [];
@@ -33,9 +29,10 @@ export function loadTodosFromDB() {
           isCompleted: doc.data().isCompleted,
         });
       });
-      returnTodos(todos);
       return todos;
     })
-    .then((todos) => todos);
-  return newTodos;
+    .catch((error) => {
+      console.error("Error loading todos: ", error);
+    });
+  return todosFromDB;
 }
