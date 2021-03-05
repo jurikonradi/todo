@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 // import Prepend from "react-bootstrap";
 import { ReactComponent as IconEdit } from "./assets/icons/pencil-square.svg";
 import { ReactComponent as IconDelete } from "./assets/icons/trash-fill.svg";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 
 function Todo({ todo, dispatch }) {
   const [isEditable, setIsEditable] = useState(false);
@@ -30,16 +31,17 @@ function Todo({ todo, dispatch }) {
   };
 
   const viewTemplate = (
-    <ListGroup horizontal className="d-flex justify-content-between">
-      <Form.Check
-        checked={isCompleted}
-        onChange={handleCheckboxChange}
-        inline
-        aria-label="Todo is Completed"
-      />
-      <ListGroup.Item className="align-items-left border-0">
-        {todo.name}
-      </ListGroup.Item>
+    <ListGroup horizontal className="justify-content-between">
+      <ListGroup horizontal>
+        <ListGroupItem className="border-0">
+          <Form.Check
+            checked={isCompleted}
+            onChange={handleCheckboxChange}
+            aria-label="Todo is Completed"
+          />
+        </ListGroupItem>
+        <ListGroup.Item className="border-0">{todo.name}</ListGroup.Item>
+      </ListGroup>
       <ListGroup horizontal>
         <ListGroup.Item
           action
