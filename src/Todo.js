@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import "./Todo.sass";
 
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
@@ -49,7 +50,7 @@ function Todo({ todo, dispatch }) {
           className="border-0"
           onClick={() => setIsEditable(true)}
         >
-          <IconEdit color="blue" alt="Edit" />
+          <IconEdit class="text-primary" alt="Edit" />
         </ListGroup.Item>
         <ListGroup.Item
           action
@@ -59,7 +60,7 @@ function Todo({ todo, dispatch }) {
             dispatch({ type: "deleteTodo", payload: { id: todo.id } })
           }
         >
-          <IconDelete color="red" alt="Delete" />
+          <IconDelete class="text-danger" alt="Delete" />
         </ListGroup.Item>
       </ListGroup>
     </ListGroup>

@@ -74,7 +74,7 @@ function App() {
   }, []);
 
   return (
-    <Container>
+    <Container className="bg-white shadow-sm p-4">
       <h1>My To-dos</h1>
       {todos.length === 0 ? (
         <div>Loading from Data Base... </div>
