@@ -3,52 +3,43 @@ import React, { useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+// import Prepend from "react-bootstrap";
 import { ReactComponent as IconEdit } from "./assets/icons/pencil-square.svg";
 import { ReactComponent as IconDelete } from "./assets/icons/trash-fill.svg";
 
 function Todo({ todo, dispatch }) {
   const [isEditable, setIsEditable] = useState(false);
 
-  const [editedTodo, setEditedTodo] = useState("");
+  const [editedName, setEditedName] = useState("");
 
-  const handleChange = (event) => {
-    setEditedTodo(event.target.value);
+  const [isCompleted, setCompleted] = useState(todo.isCompleted);
+
+  const handleNameChange = (event) => {
+    setEditedName(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch({ type: "editTodo", payload: { id: todo.id, name: editedTodo } });
+    dispatch({ type: "editTodo", payload: { id: todo.id, name: editedName } });
     setIsEditable(false);
   };
 
-  const editTemplate = (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group>
-        <Form.Label>Edit Todo:</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder={todo.name}
-          vaue={editedTodo}
-          onChange={handleChange}
-        />
-
-        <Button
-          variant="secondary"
-          type="reset"
-          onClick={() => setIsEditable(false)}
-        >
-          Cancel
-        </Button>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form.Group>
-    </Form>
-  );
+  const handleCheckboxChange = () => {
+    setCompleted(!isCompleted);
+    dispatch({ type: "toggleIsCompleted", payload: { id: todo.id } });
+  };
 
   const viewTemplate = (
     <ListGroup horizontal className="d-flex justify-content-between">
-      <ListGroup.Item className="border-0">{todo.name}</ListGroup.Item>
+      <Form.Check
+        checked={isCompleted}
+        onChange={handleCheckboxChange}
+        inline
+        aria-label="Todo is Completed"
+      />
+      <ListGroup.Item className="align-items-left border-0">
+        {todo.name}
+      </ListGroup.Item>
       <ListGroup horizontal>
         <ListGroup.Item
           action
@@ -70,6 +61,31 @@ function Todo({ todo, dispatch }) {
         </ListGroup.Item>
       </ListGroup>
     </ListGroup>
+  );
+
+  const editTemplate = (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Label>Edit Todo:</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder={todo.name}
+          vaue={editedName}
+          onChange={handleNameChange}
+        />
+
+        <Button
+          variant="secondary"
+          type="reset"
+          onClick={() => setIsEditable(false)}
+        >
+          Cancel
+        </Button>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form.Group>
+    </Form>
   );
 
   return (

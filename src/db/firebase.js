@@ -16,6 +16,40 @@ export function addTodoToDB(todo) {
     });
 }
 
+export function deleteTodoFromDB(todo) {
+  db.collection(collectionName)
+    .doc(todo.id)
+    .delete()
+    .then(() => {
+      console.log("Document successfully deleted!");
+    })
+    .catch((error) => {
+      console.error("Error removing document: ", error);
+    });
+}
+
+export function editTodoInDB(id, name) {
+  db.collection(collectionName)
+    .doc(id)
+    .update({
+      name: name,
+    })
+    .then(() => {
+      console.log("Document successfully updated!");
+    });
+}
+
+export function toggleCompletedInDB(id, isCompleted) {
+  db.collection(collectionName)
+    .doc(id)
+    .update({
+      isCompleted: isCompleted,
+    })
+    .then(() => {
+      console.log("Document successfully updated!");
+    });
+}
+
 export async function loadTodosFromDB() {
   const todosFromDB = await db
     .collection(collectionName)

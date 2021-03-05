@@ -6,7 +6,13 @@ import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import FormTodo from "./FormTodo";
 import Todo from "./Todo";
-import { addTodoToDB, loadTodosFromDB } from "./db/firebase.js";
+import {
+  addTodoToDB,
+  loadTodosFromDB,
+  deleteTodoFromDB,
+  editTodoInDB,
+  toggleCompletedInDB,
+} from "./db/firebase.js";
 // import { collectionName } from "./db/firebase.config.js";
 
 function reducer(todos, action) {
@@ -24,6 +30,7 @@ function reducer(todos, action) {
       const filteredTodos = todos.filter(
         (todo) => todo.id !== action.payload.id
       );
+      deleteTodoFromDB(action.payload.id);
       return filteredTodos;
     }
     case "editTodo": {
@@ -33,11 +40,24 @@ function reducer(todos, action) {
         }
         return todo;
       });
+      editTodoInDB(action.payload.id, action.payload.name);
       return editedTodos;
     }
-    case "itializeTodos": {
-      const todosFromDB = [...action.payload.todos];
-      return todosFromDB;
+    case "toggleIsCompleted": {
+      let toggledTodoIsCompleted;
+      const toggledTodos = todos.map((todo) => {
+        if (todo.id === action.payload.id) {
+          toggledTodoIsCompleted = !todo.isCompleted;
+          return { ...todo, isCompleted: !todo.isCompleted };
+        }
+        return todo;
+      });
+      console.log("toggleIsCompleted reducer", toggledTodos);
+      toggleCompletedInDB(action.payload.id, toggledTodoIsCompleted);
+      return toggledTodos;
+    }
+    case "initializeTodos": {
+      return [...action.payload.todos];
     }
     default:
       return todos;
@@ -49,8 +69,7 @@ function App() {
 
   useEffect(() => {
     loadTodosFromDB().then((results) => {
-      console.log("results: ", results);
-      dispatch({ type: "itializeTodos", payload: { todos: results } });
+      dispatch({ type: "initializeTodos", payload: { todos: results } });
     });
   }, []);
 

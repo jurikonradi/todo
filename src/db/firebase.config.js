@@ -1,4 +1,5 @@
 export const collectionName = "todos-test";
+
 export const firebaseConfig = {
   apiKey: "AIzaSyBuv9zQsAeNzvTFgINl1Nc_AItsrcnsHJM",
   authDomain: "todo-test-c51d0.firebaseapp.com",
