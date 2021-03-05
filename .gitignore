@@ -25,3 +25,4 @@ yarn-error.log*
 src/Todo-icon-try.js
 src/EditTemplate.js
 README2.md
+database.rules.comment.js
