@@ -2,6 +2,8 @@
 
 Functions: Add New, Delete, Edit.
 
+Conected to database (Firebase Cloud).
+
 Written with React, useReducer, Boootstrap-React.
 
 # Demo online
